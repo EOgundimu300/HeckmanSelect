@@ -34,3 +34,10 @@ The package also contain functions for regularized probit regression. the result
     Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by 
     ProbitLasso.
     
+# How to use the Package
+ library(HeckmanSelect)
+## Example simulated data
+data()
+## Data sets in package HeckmanSelect:
+#AmEx American Express Credit Card data
+#binHeckman Simulated data
