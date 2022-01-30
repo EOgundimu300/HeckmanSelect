@@ -12,14 +12,14 @@ Functions implemented (use help to read more about the functions)
 #### (1) HeckSelect 
     Function for binary Heckman model with variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals) based approach is     implemented.
  
-### (2) bootValidate
+#### (2) bootValidate
     Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by
     HeckSelect
  
-### (3) HeckPval
+#### (3) HeckPval
     This function is based on the use of P-value to select variables in Binary Heckman selection model. Default P-value = 0.05. 
   
-### (4) bootValidate_Pval
+#### (4) bootValidate_Pval
     Bootstrap internal validation technique to correct for overoptimism in predictions - the alpha value is inherited from the object HeckPval.
     Note that this is different from the "bootValidate" as this is based on dropping variables whose values are greater than the alpha value from the model. If no variable
     selection is required, please set alpha =1 in HeckPval object.
@@ -27,20 +27,21 @@ Functions implemented (use help to read more about the functions)
 
 The package also contain functions for regularized probit regression. the results are similar to GLMNET package as they both implemented the coordinate descent algorithm.
 
-### (5) ProbitLasso
+#### (5) ProbitLasso
     This is probit regression. The missing data is delected to fit the model to complete data
     
-### (6) boot_ProbitLasso
+#### (6) boot_ProbitLasso
     Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by 
     ProbitLasso.
     
-# How to use the Package
+## How to use the Package
  library(HeckmanSelect)
-## Example simulated data
+### Example simulated data
 data()
-## Data sets in package HeckmanSelect:
-#### AmEx American Express Credit Card data (see: Greene WH (1998) Sample selection in credit-scoring models )
+### Data sets in package HeckmanSelect:
+#### AmEx: American Express Credit Card data (see: Greene WH (1998) Sample selection in credit-scoring models )
 #### binHeckman is a Simulated data
+
 
 
 ###### selection <- uu~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11+X12
@@ -53,3 +54,10 @@ data()
 ###### coef.HeckSelect(pp)# coefficients
 ###### aa <- bootValidate(pp, data=binHeckman, mboot=100, seed=1)# bootstrap validation
 ###### aa$resu # optimism corrected metrics
+
+
+We can also use the package for Probit Lasso (complete case analysis). Here, we use the American Express Credit Card data for illustration.
+##### datt <- AmEx
+##### dat <- subset(datt,  !(CARDHLDR ==0))# we select the complete data set
+#### default_eq <- DEFAULT~AGE+ACADMOS+ADEPCNT+AEMPMOS+MAJORDRG+ MINORDRG+OWNRENT+APADMOS+AMAMIND+INCOME+SELFEMPL+ TRADACCT+ INCPER+ EXP_INC+CPTOPNB+ CPTOPNG+ CPT30C+CPTF30+CPTAVRV+CBURDEN
+
