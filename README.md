@@ -9,9 +9,9 @@ We also implemented Probit Lasso regression in our "ProbitLasso"" function. It i
 algorithm. The main addition is that the model can be validated using bootstrap validation method via the function "boot_ProbitLasso".
 
 Functions implemented (use help to read more about the functions)
-(1) HeckSelect 
+#(1) HeckSelect 
  Function for binary Heckman model with variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals) based approach is implemented.
-(2) bootValidate
+#(2) bootValidate
  Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples.
 (3) HeckPval
   This function is based on the use of P-value to select variables in Binary Heckman selection model. Default P-value = 0.05. 
