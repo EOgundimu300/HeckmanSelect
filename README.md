@@ -57,10 +57,10 @@ data()
 
 
 
-We can also use the package for Probit Lasso (complete case analysis). Here, we use the American Express Credit Card data for illustration.
+## We can also use the package for Probit Lasso (complete case analysis). Here, we use the American Express Credit Card data for illustration.
 
 ##### datt <- AmEx
-##### dat <- subset(datt,  !(CARDHLDR ==0))# we select the complete data set
+##### dat <- subset(datt,  !(CARDHLDR ==0))# we selected complete data set
 ##### default_eq <- DEFAULT~AGE+ACADMOS+ADEPCNT+AEMPMOS+MAJORDRG+ MINORDRG+OWNRENT+APADMOS+AMAMIND+INCOME+SELFEMPL+ TRADACCT+ INCPER+ EXP_INC+CPTOPNB+ CPTOPNG+ CPT30C+CPTF30+CPTAVRV+CBURDEN
 
 ##### aa <- ProbitLasso(formula=default_eq, data=dat, allowParallel = TRUE, penalty="ALASSO", crit="bic")
