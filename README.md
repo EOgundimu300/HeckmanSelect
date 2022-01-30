@@ -9,7 +9,7 @@ We also implemented Probit Lasso regression in our "ProbitLasso"" function. It i
 algorithm. The main addition is that the model can be validated using bootstrap validation method via the function "boot_ProbitLasso".
 
 Functions implemented (use help to read more about the functions)
-### (1) HeckSelect 
+#### (1) HeckSelect 
     Function for binary Heckman model with variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals) based approach is     implemented.
  
 ### (2) bootValidate
@@ -39,9 +39,17 @@ The package also contain functions for regularized probit regression. the result
 ## Example simulated data
 data()
 ## Data sets in package HeckmanSelect:
-#### AmEx American Express Credit Card data
-#### binHeckman Simulated data
+#### AmEx American Express Credit Card data (see: Greene WH (1998) Sample selection in credit-scoring models )
+#### binHeckman is a Simulated data
 
 
 ###### selection <- uu~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11+X12
 ###### outcome <- yobs ~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11
+
+###### pp <- HeckSelect(selection, outcome, data=binHeckman, allowParallel = TRUE,
+###### penalty="ALASSO", Model="AMH",crit="bic")
+###### names(pp)# to see objects created
+###### options(scipen=999)
+###### coef.HeckSelect(pp)# coefficients
+###### aa <- bootValidate(pp, data=binHeckman, mboot=100, seed=1)# bootstrap validation
+###### aa$resu # optimism corrected metrics
