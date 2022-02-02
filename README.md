@@ -10,29 +10,29 @@ algorithm. The main addition is that the model can be validated using bootstrap 
 
 Functions implemented (use help (e.g. ?HeckSelect) to read more about the functions)
 #### (1) HeckSelect 
-    Function for binary Heckman model with variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals) based approach is     implemented.
+  Function for binary Heckman model with variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals) based approach is     implemented.
  
 #### (2) bootValidate
-    Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by
-    HeckSelect
+  Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by
+  HeckSelect
  
 #### (3) HeckPval
-    This function is based on the use of P-value to select variables in Binary Heckman selection model. Default P-value = 0.05. 
+  This function is based on the use of P-value to select variables in Binary Heckman selection model. Default P-value = 0.05. 
   
 #### (4) bootValidate_Pval
-    Bootstrap internal validation technique to correct for overoptimism in predictions - the alpha value is inherited from the object HeckPval.
-    Note that this is different from the "bootValidate" as this is based on dropping variables whose values are greater than the alpha value from the model. If no variable
-    selection is required, please set alpha =1 in HeckPval object.
+  Bootstrap internal validation technique to correct for overoptimism in predictions - the alpha value is inherited from the object HeckPval.
+  Note that this is different from the "bootValidate" as this is based on dropping variables whose values are greater than the alpha value from the model. If no variable
+  selection is required, please set alpha =1 in HeckPval object.
   
 
 The package also contain functions for regularized probit regression. the results are similar to GLMNET package as they both implemented the coordinate descent algorithm.
 
 #### (5) ProbitLasso
-    This is probit regression. The missing data is delected to fit the model to complete data
+  This is probit regression. The missing data is delected to fit the model to complete data
     
 #### (6) boot_ProbitLasso
-    Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by 
-    ProbitLasso.
+  Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by 
+  ProbitLasso.
     
 ## How to use the Package
  library(HeckmanSelect)
