@@ -47,8 +47,7 @@ data()
 ###### selection <- uu~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11+X12
 ###### outcome <- yobs ~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11
 
-###### pp <- HeckSelect(selection, outcome, data=binHeckman, allowParallel = TRUE,
-###### penalty="ALASSO", Model="AMH",crit="bic")
+###### pp <- HeckSelect(selection, outcome, data=binHeckman, allowParallel = TRUE, penalty="ALASSO", Model="AMH",crit="bic")
 ###### names(pp)# to see objects created
 ###### options(scipen=999)
 ###### coef.HeckSelect(pp)# coefficients
