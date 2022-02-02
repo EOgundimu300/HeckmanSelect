@@ -8,7 +8,7 @@ bootstrap approach for models developed via variable selection using P-values in
 We also implemented Probit Lasso regression in our "ProbitLasso"" function. It is similar to the GLMNET package as they both implemented the coordinate descent
 algorithm. The main addition is that the model can be validated using bootstrap validation method via the function "boot_ProbitLasso".
 
-Functions implemented (use help to read more about the functions)
+Functions implemented (use help (e.g. ?HeckSelect) to read more about the functions)
 #### (1) HeckSelect 
     Function for binary Heckman model with variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals) based approach is     implemented.
  
