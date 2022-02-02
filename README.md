@@ -56,7 +56,7 @@ data()
 
 
 
-### We can also use the package for Probit regression with Lasso (complete case analysis). Here, we use the American Express Credit Card data for illustration.
+#### We can also use the package for Probit regression with Lasso (complete case analysis). Here, we use the American Express Credit Card data for illustration.
 
 ##### datt <- AmEx
 ##### dat <- subset(datt,  !(CARDHLDR ==0))# we selected complete data set
