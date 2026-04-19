@@ -1,21 +1,21 @@
 # HeckmanSelect
 
-Penalised estimation for the binary Heckman / bivariate probit with 
-sample-selection (BPSS) model.
+Regularized estimation for the bivariate probit model with 
+sample-selection (BPSS).
 
 ## Overview
 
-`HeckmanSelect` implements three complementary penalised estimators 
-for the binary bivariate probit with sample selection model, suitable 
+`HeckmanSelect` implements three complementary penalized estimators 
+for the bivariate probit model with sample selection, suitable 
 for reject-inference applications in credit scoring and related 
 selection-bias problems in binary outcomes.
 
 - **`HeckSelect()`** — lasso (Tibshirani 1996) and adaptive-lasso 
-  (Zou 2006) penalisation via a Least-Squares Approximation (LSA) 
+  (Zou 2006) penalization via a Least-Squares Approximation (LSA) 
   surrogate with coordinate descent and warm starts. Supports 
   Normal-error and Ali–Mikhail–Haq (AMH) copula dependence structures.
-- **`RidgeBPSS()`** — ridge penalisation via direct trust-region 
-  optimisation of the penalised negative log-likelihood, with 
+- **`RidgeBPSS()`** — ridge penalization via direct trust-region 
+  optimization of the penalized negative log-likelihood, with 
   separate penalty parameters for regression coefficients and the 
   selectivity parameter.
 
