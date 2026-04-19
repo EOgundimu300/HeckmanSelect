@@ -1,0 +1,37 @@
+Package: HeckmanSelect
+Title: Penalized Estimation for Bivariate Probit Model with Sample Selection
+Version: 2.0.0
+Authors@R: 
+    person("Emmanuel", "Ogundimu",
+           email = "emmanuel.ogundimu@durham.ac.uk",
+           role = c("aut", "cre"))
+Description: Implements lasso and adaptive-lasso (via HeckSelect) and 
+    ridge (via RidgeBPSS) penalized estimation for the 
+    bivariate probit sample-selection model. Supports Normal-error 
+    and Ali-Mikhail-Haq (AMH) copula dependence structures. Includes 
+    bootstrap optimism-corrected internal validation with 
+    metric-specific paired optimism (AUC, AUPR, Brier, ECE, MCE). 
+    Designed for reject inference in credit scoring and related 
+    selection-bias applications. The package includes the American 
+    Express credit card dataset (Greene 1998) as an example.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 4.0.0)
+Imports: 
+    pbivnorm,
+    trust,
+    stats,
+    graphics,
+    grDevices,
+    utils
+Suggests: 
+    PRROC,
+    numDeriv,
+    MASS,
+    GJRM,
+    testthat (>= 3.0.0)
+RoxygenNote: 7.3.3
+URL: https://github.com/EOgundimu300/HeckmanSelect
+BugReports: https://github.com/EOgundimu300/HeckmanSelect/issues
