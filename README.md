@@ -1,66 +1,132 @@
 # HeckmanSelect
 
-The package carries out variable selection in binary Heckman selection model and use bootstrap validation technique to estimate optimisim in the metrics for predictive accuracy. AUROC (Area under the receiver operating curve), 
-AUCROC (Area under the Receiver Operating Characteristic curve), AUPRC (Area under the precision-recall curve), BS (Brier Score), ECE (Expected Calibration Error) and MCE (Maximum Calibration Error) are implemented.
-Lasso and Adaptive Lasso are implemented for variable selection. Normal error and AMH (Ali-Mikhail-Haq) copula errors are implemented. We implemented the 
-bootstrap approach for models developed via variable selection using P-values in the functions "HeckPval" and "bootValidate_Pval".
+Penalised estimation for the binary Heckman / bivariate probit with 
+sample-selection (BPSS) model.
 
-We also implemented Probit Lasso regression in our "ProbitLasso"" function. It is similar to the GLMNET package as they both implemented the coordinate descent
-algorithm. The main addition is that the model can be validated using bootstrap validation method via the function "boot_ProbitLasso".
+## Overview
 
-Functions implemented (use help (e.g. ?HeckSelect) to read more about the functions)
-#### (1) HeckSelect 
-  Function for binary outcome with sample selection and variable selection. Adaptive Lasso and Lasso are implemented. Normal error and AMH copula (with probit marginals)     based approach is implemented at the moment.
- 
-#### (2) bootValidate
-  Bootstrap internal validation technique to correct for overoptimism in predictions - "mboot" is the number of bootstrap samples. The function takes the object created by
-  HeckSelect and use non-parametric bootstrap method to compute optimism corrected predictive accuracy measures.
- 
-#### (3) HeckPval
-  This function is based on the use of P-value to select variables in Binary Heckman selection model. Default P-value = 0.05. 
-  
-#### (4) bootValidate_Pval
-  Bootstrap internal validation technique to correct for overoptimism in predictions - the alpha value is inherited from the object HeckPval.
-  Note that this is different from the "bootValidate" as this is based on dropping variables whose values are greater than the alpha value from the model. If no variable
-  selection is required, please set alpha =1 in HeckPval object.
-  
+`HeckmanSelect` implements three complementary penalised estimators 
+for the binary bivariate probit with sample selection model, suitable 
+for reject-inference applications in credit scoring and related 
+selection-bias problems in binary outcomes.
 
-The package also contain functions for regularized probit regression. The results are similar to GLMNET package as they both implemented the coordinate descent algorithm.
+- **`HeckSelect()`** — lasso (Tibshirani 1996) and adaptive-lasso 
+  (Zou 2006) penalisation via a Least-Squares Approximation (LSA) 
+  surrogate with coordinate descent and warm starts. Supports 
+  Normal-error and Ali–Mikhail–Haq (AMH) copula dependence structures.
+- **`RidgeBPSS()`** — ridge penalisation via direct trust-region 
+  optimisation of the penalised negative log-likelihood, with 
+  separate penalty parameters for regression coefficients and the 
+  selectivity parameter.
 
-#### (5) ProbitLasso
-  This is probit regression. The missing data is delected to fit the model to complete data
-    
-#### (6) boot_ProbitLasso
-  Bootstrap internal validation technique to correct for overoptimism in predictions - mboot is the number of bootstrap samples. The function takes the object created by 
-  ProbitLasso.
-    
-## How to use the Package
- library(HeckmanSelect)
-### Example simulated data
-data()
-### Data sets in package HeckmanSelect:
-#### AmEx: American Express Credit Card data (see: Greene WH (1998) Sample selection in credit-scoring models )
-#### binHeckman is a Simulated data
+Both fitters support automatic tuning of the penalty parameter(s) 
+via BIC, AIC, or GCV, and return S3 objects with `print`, `summary`, 
+`coef`, `predict`, and `logLik` methods.
+
+Bootstrap optimism-corrected internal validation is provided via 
+the `bootValidate()` S3 generic, which reports paired-optimism-
+corrected AUC, AUPR (area under precision-recall curve), Brier 
+score, ECE (expected calibration error), and MCE (maximum 
+calibration error). Paired computation is used because AUC and 
+AUPR can fail when a bootstrap sample misses one class, while 
+Brier, ECE, and MCE remain computable — a naive 
+`mean(training) - mean(test)` would mix different replicate sets 
+per metric.
+
+## Included data
+
+The package bundles the **American Express credit card dataset** 
+(Greene 1998): 13,444 applications with 56 variables covering 
+demographics, credit history, spending patterns, and ZIP-code-level 
+socioeconomic indicators. This is the standard benchmark dataset 
+for reject-inference research. See `?AmEx` for full variable 
+documentation.
+
+## Installation
+
+```r
+# install.packages("devtools")
+devtools::install_github("EOgundimu300/HeckmanSelect")
+```
+
+To install a specific tagged version:
+
+```r
+devtools::install_github("EOgundimu300/HeckmanSelect@v2.0.0")
+```
+
+## Quick example (synthetic data)
+
+```r
+library(HeckmanSelect)
+
+set.seed(1)
+n <- 500
+x1 <- rnorm(n); x2 <- rnorm(n); Z <- rnorm(n); V <- rnorm(n)
+S <- as.integer(0.2 + 0.5*x1 - 0.4*x2 - 0.5*Z + rnorm(n) > 0)
+Y <- as.integer(0.1 + 0.6*x1 - 0.3*x2 + rnorm(n) > 0)
+Y[S == 0] <- 0L
+dat <- data.frame(S = S, Y_obs = Y, x1 = x1, x2 = x2, Z = Z, V = V)
+
+# Adaptive-lasso fit
+fit_hs <- HeckSelect(S ~ x1 + x2 + Z, Y_obs ~ x1 + x2 + V,
+                      data = dat, penalty = "alasso", Model = "Normal")
+summary(fit_hs)
+
+# Ridge fit
+fit_rb <- RidgeBPSS(S ~ x1 + x2 + Z, Y_obs ~ x1 + x2 + V,
+                     data = dat, lambda = 0.1, lambda.rho = 0)
+summary(fit_rb)
+
+# Bootstrap validation (requires the PRROC package)
+val <- bootValidate(fit_hs, data = dat, mboot = 200, seed = 1)
+val$resu
+```
+
+## Example on AmEx
+
+```r
+library(HeckmanSelect)
+data(AmEx)
+
+outcome   <- DEFAULT  ~ AGE + ACADMOS + ADEPCNT + MAJORDRG + 
+             MINORDRG + OWNRENT + INCOME + SELFEMPL
+selection <- CARDHLDR ~ AGE + ACADMOS + ADEPCNT + MAJORDRG + 
+             MINORDRG + OWNRENT + INCOME + SELFEMPL + BANKSAV + BANKCH
+
+fit <- HeckSelect(selection, outcome, data = AmEx,
+                   penalty = "alasso", Model = "AMH", crit = "bic")
+summary(fit)
+
+# Paired-optimism bootstrap validation
+val <- bootValidate(fit, data = AmEx, mboot = 200, seed = 1)
+val$resu
+```
+
+## Methodology
+
+The methods implemented in this package are described in:
+
+- Ogundimu, E. O. (2019). Prediction of default probability by using 
+  statistical models for rare events. *Journal of the Royal 
+  Statistical Society: Series A*, 182(4), 1143–1162.
+- Ogundimu, E. O. (2022). On Lasso and adaptive Lasso for non-random 
+  sample in credit scoring. *Statistical Modelling*, 22(6), 519–542.
 
 
+## Citation
 
-###### selection <- uu~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11+X12
-###### outcome <- yobs ~ X1+ X2 + X3+ X4+ X5+ X6+ X7+ X8 + X9 + X10 +X11
+To cite `HeckmanSelect` in publications, use:
 
-###### pp <- HeckSelect(selection, outcome, data=binHeckman, allowParallel = TRUE, penalty="ALASSO", Model="AMH",crit="bic")
-###### names(pp)# to see variables created within object pp
-###### options(scipen=999)
-###### coef.HeckSelect(pp)# coefficients
-###### aa <- bootValidate(pp, data=binHeckman, mboot=100, seed=1)# bootstrap validation
-###### aa$resu # optimism corrected metrics
+```r
+citation("HeckmanSelect")
+```
 
+## License
 
+MIT © Emmanuel Ogundimu. See `LICENSE` for details.
 
-#### We can also use the package for Probit regression with Lasso (complete case analysis). Here, we use the American Express Credit Card data for illustration.
+## Contributing
 
-##### datt <- AmEx
-##### dat <- subset(datt,  !(CARDHLDR ==0))# we selected complete data set
-##### default_eq <- DEFAULT~AGE+ACADMOS+ADEPCNT+AEMPMOS+MAJORDRG+ MINORDRG+OWNRENT+APADMOS+AMAMIND+INCOME+SELFEMPL+ TRADACCT+ INCPER+ EXP_INC+CPTOPNB+ CPTOPNG+ CPT30C+CPTF30+CPTAVRV+CBURDEN
-
-##### aa <- ProbitLasso(formula=default_eq, data=dat, allowParallel = TRUE, penalty="ALASSO", crit="bic")
-##### Nadlasso <- boot_ProbitLasso(aa, data=dat, mboot=100, seed=1)
+Issues and pull requests are welcome at 
+[https://github.com/EOgundimu300/HeckmanSelect/issues](https://github.com/EOgundimu300/HeckmanSelect/issues).
