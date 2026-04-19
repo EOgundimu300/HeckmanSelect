@@ -111,7 +111,7 @@ The methods implemented in this package are described in:
   statistical models for rare events. *Journal of the Royal 
   Statistical Society: Series A*, 182(4), 1143–1162.
 - Ogundimu, E. O. (2024). On Lasso and adaptive Lasso for non-random 
-  sample in credit scoring. *Statistical Modelling*, 22(6), 519–542.
+  sample in credit scoring. *Statistical Modelling*, 24(2), 115-138.
 
 
 ## Citation
